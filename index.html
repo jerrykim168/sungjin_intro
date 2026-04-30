@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김성진 · AI컨설턴트 · 상상우리</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background: #fff;
+      color: #333;
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── 헤더 ── */
+    header {
+      background: #1F3864;
+      color: #fff;
+      text-align: center;
+      padding: 40px 24px 32px;
+    }
+
+    /* 프로필 사진 */
+    .profile-wrap {
+      margin-bottom: 18px;
+    }
+
+    .profile-wrap img {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* 이미지 로드 실패 시 표시되는 이니셜 원 */
+    .profile-initials {
+      display: none;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 3px solid rgba(255, 255, 255, 0.6);
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* 이름·직책·회사 한 줄 (본문 1.5배 크기) */
+    .nameplate {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nameplate .sep {
+      margin: 0 6px;
+      opacity: 0.45;
+      font-weight: 300;
+    }
+
+    /* 자기소개 */
+    .bio {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      line-height: 1.85;
+      opacity: 0.92;
+      text-align: left;
+    }
+
+    /* ── 본문 ── */
+    main {
+      padding: 28px 20px 48px;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #1F3864;
+      text-transform: uppercase;
+      border-bottom: 2px solid #1F3864;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    /* ── 경력 카드 ── */
+    .career-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .career-card {
+      background: #fff;
+      border: 1px solid #333;
+      border-left: 4px solid #1F3864;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .career-card .year {
+      font-size: 0.78rem;
+      color: #1F3864;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .career-card .company-role {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #333;
+      margin-top: 2px;
+    }
+
+    .career-card .summary {
+      font-size: 0.875rem;
+      color: #333;
+      line-height: 1.55;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #333;
+    }
+
+    /* ── 연락처 텍스트 ── */
+    .contact-info {
+      margin-bottom: 18px;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .contact-label {
+      font-weight: 700;
+      color: #1F3864;
+      min-width: 52px;
+      flex-shrink: 0;
+    }
+
+    /* ── 버튼 ── */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s;
+    }
+
+    .btn:active {
+      opacity: 0.78;
+    }
+
+    .btn-email {
+      background: #1F3864;
+      color: #fff;
+    }
+
+    .btn-phone {
+      background: #fff;
+      color: #1F3864;
+      border: 2px solid #1F3864;
+    }
+
+    /* ── 토스트 ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #333;
+      color: #fff;
+      font-size: 0.85rem;
+      padding: 10px 22px;
+      border-radius: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── 푸터 ── */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #333;
+      padding: 0 20px 32px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── 헤더 ── -->
+  <header>
+    <div class="profile-wrap">
+      <img src="profile.jpg" alt="김성진 프로필 사진"
+        onerror="this.style.display='none'; document.querySelector('.profile-initials').style.display='flex';">
+      <div class="profile-initials">김</div>
+    </div>
+
+    <div class="nameplate">
+      김성진<span class="sep">·</span>AI컨설턴트<span class="sep">·</span>상상우리
+    </div>
+
+    <p class="bio">
+      IT 업계에서 31년간 기획·운영·관리를 두루 경험하고, 관악구 생활상권 활성화 사업을 3년간 총괄했습니다.
+      현재는 소상공인과 중소기업이 AI 도구를 실무에 바로 적용할 수 있도록
+      현장 밀착형 컨설팅을 제공하고 있습니다.
+      이론보다 현장에서 검증된 방식으로, 작지만 확실한 변화를 함께 만들어 드겠습니다.
+    </p>
+  </header>
+
+  <!-- ── 본문 ── -->
+  <main>
+
+    <!-- 경력 (4건, 최신순) -->
+    <h2 class="section-title">경력</h2>
+    <div class="career-list">
+
+      <div class="career-card">
+        <div class="year">2022 – 2024</div>
+        <div class="company-role">관악구 생활상권 · 사업기획·운영 총괄</div>
+        <div class="summary">생활상권 활성화 사업 기획·예산 편성·운영 총괄, 3년 연속 목표 달성</div>
+      </div>
+
+      <div class="career-card">
+        <div class="year">2020 – 2021</div>
+        <div class="company-role">소상공인 컨설턴트</div>
+        <div class="summary">소상공인 온라인 판로개척 컨설팅 등 1.5년간 다수 사업체 현장 지원</div>
+      </div>
+
+      <div class="career-card">
+        <div class="year">1988 – 2019</div>
+        <div class="company-role">IT 업계 · 기획·관리 전문가</div>
+        <div class="summary">소프트웨어 개발·시스템 기획, 제조·유통·금융 프로젝트 관리 등 IT 전반에 걸친 31년 실무 경험</div>
+      </div>
+
+    </div>
+
+    <!-- 연락처 -->
+    <h2 class="section-title">연락처</h2>
+
+    <div class="contact-info">
+      <div class="contact-row">
+        <span class="contact-label">이메일</span>
+        <span>socialbiz168@gmail.com</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">전화</span>
+        <span>010-2717-3984</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <a class="btn btn-email" href="mailto:socialbiz168@gmail.com">이메일 보내기</a>
+      <button class="btn btn-phone" onclick="copyPhone()">전화 걸기 (번호 복사)</button>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>김성진 &copy; 2026 · 상상우리</p>
+  </footer>
+
+  <!-- 복사 완료 토스트 -->
+  <div class="toast" id="toast">전화번호가 클립보드에 복사되었습니다</div>
+
+  <script>
+    var PHONE = '010-2717-3984';
+
+    function copyPhone() {
+      navigator.clipboard.writeText(PHONE).then(showToast).catch(function () {
+        var ta = document.createElement('textarea');
+        ta.value = PHONE;
+        ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast();
+      });
+    }
+
+    function showToast() {
+      var t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 2500);
+    }
+  </script>
+
+</body>
+
+</html>
